@@ -9,6 +9,7 @@
 	<classpathentry kind="lib" path="lib/libs/guava-25.0-jre.jar"/>
 	<classpathentry kind="lib" path="lib/libs/okhttp-3.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/libs/okio-1.14.0.jar"/>
-	<classpathentry kind="lib" path="lib/client-combined-3.141.59.jar"/>
+	<classpathentry kind="lib" path="lib/client-combined-3.141.59-sources.jar"/>
+	<classpathentry kind="lib" path="lib/client-combined-3.141.59.jar" sourcepath="lib/client-combined-3.141.59-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
