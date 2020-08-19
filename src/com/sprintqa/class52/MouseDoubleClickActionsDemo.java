@@ -1,7 +1,11 @@
 package com.sprintqa.class52;
 
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 
 public class MouseDoubleClickActionsDemo {
 	
@@ -22,7 +26,23 @@ public class MouseDoubleClickActionsDemo {
 			 * Example 2: Using the Action class doubleClick() method.
 			 * 1. Click the "Double Click Me!" button
 			 */			
-
+			WebElement dblClick = driver.findElement(By.name("dblClick"));
+			
+			Actions actions = new Actions(driver);
+			//actions.click(dblClick).click();
+			actions.doubleClick(dblClick).build().perform();
+			
+			Thread.sleep(2000);
+			
+			Alert alert = driver.switchTo().alert();
+			System.out.println(alert.getText());
+			
+			Thread.sleep(2000);
+			alert.accept();
+			driver.switchTo().defaultContent();
+			
+			Thread.sleep(2000);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
