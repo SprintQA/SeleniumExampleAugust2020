@@ -49,7 +49,7 @@ public class MouseClickActionsDemo {
 			 * numbered Elements 2. Click the current number 3. Pause 1 second between
 			 * clicks
 			 */
-			WebElement selectableButtonList = driver.findElement(By.id("selectable"));
+			//WebElement selectableButtonList = driver.findElement(By.id("selectable"));
 
 			/*
 			 * Because the numbered boxes are a list we need to get list items. Since this
@@ -57,8 +57,11 @@ public class MouseClickActionsDemo {
 			 * additional findElements() call on the <ul> tag "selectable" for <li> tags.
 			 * This will return a List of line Item Webelements.
 			 */
-			List<WebElement> numberListItems = selectableButtonList.findElements(By.tagName("li"));
+			//List<WebElement> numberListItems = selectableButtonList.findElements(By.tagName("li"));
 
+			List<WebElement> numberListItems = driver.findElements(By.xpath("//ol[@id='selectable']//child::li"));
+
+			
 			for (WebElement numberListItem : numberListItems) {
 				actions.click(numberListItem).pause(1000);
 			}
