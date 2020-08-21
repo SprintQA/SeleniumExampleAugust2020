@@ -1,6 +1,10 @@
 package com.sprintqa.class54;
 
+import java.util.List;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class StaticWebTableDemo2 {
@@ -31,8 +35,24 @@ public class StaticWebTableDemo2 {
 			 * REPEAT STEPS 1-7
 			 */
 			
-		
-
+			By tableHeaderLocator = By.xpath("//table//child::thead//child::tr//descendant::th");
+			By tableRowLocator = By.xpath("//table//child::tbody//descendant::tr[@style='display: table-row;']");
+			By pageLinkLocator = By.cssSelector("a.page_link");
+			
+			List<WebElement> tableHeaders;
+			List<WebElement> tableRows;
+			
+			List<WebElement> pageLinks = driver.findElements(pageLinkLocator);
+			for(WebElement pageLink:pageLinks) {
+				pageLink.click();
+				
+				tableHeaders = driver.findElements(tableHeaderLocator);
+				getTableHeaders(tableHeaders);			
+				
+				tableRows = driver.findElements(tableRowLocator);
+				getTableRowText(tableRows);
+				
+			}
 			Thread.sleep(2000);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -40,7 +60,29 @@ public class StaticWebTableDemo2 {
 			driver.close();
 			driver.quit();
 		}
-
 	}
+	
+	public static void getTableHeaders(List<WebElement> cols) {
+		System.out.println("=======================");
+		System.out.println("Number of columns is=" + cols.size());
+		System.out.println("=======================");
+		System.out.println("Printing column headers");
+		System.out.println("=======================");
+		for (WebElement col : cols) {
+			System.out.println(col.getText());
+		}
+	}
+	
+	public static void getTableRowText(List<WebElement> rows) {
+		System.out.println("=======================");
+		System.out.println("Number of rows is=" + rows.size());
+		System.out.println("=======================");
+		System.out.println("  Printing row data    ");
+		System.out.println("=======================");
+		for (WebElement element : rows) {
+			System.out.println(element.getText());
+		}
+	}
+
 	
 }
