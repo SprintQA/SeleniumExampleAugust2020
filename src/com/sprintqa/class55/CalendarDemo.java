@@ -1,6 +1,8 @@
 package com.sprintqa.class55;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class CalendarDemo {
@@ -38,9 +40,35 @@ public class CalendarDemo {
 			 * 9. Click on Jan 31 2021
 			 */
 			
+			WebElement hotelCheckin = driver.findElement(By.id("hotel-checkin-hp-hotel"));
+			hotelCheckin.click();
 			
+			By datepickerCalMonthCaptionLocator = By.cssSelector("div.datepicker-cal-month > table > caption");
+			
+			// Get the displayed text from the the left calendars Date Picker Calendar Month
+			// Caption and store it in a String variable calendarDisplayedMonth.
+			String calendarDisplayedMonth = driver.findElement(datepickerCalMonthCaptionLocator).getText();
 
-			Thread.sleep(2000);
+			System.out.println(calendarDisplayedMonth);
+			
+			if (!calendarDisplayedMonth.equals("Jan 2021")) {
+				// If calendarDisplayedMonth does not equal "Jan 2021"
+				do {
+					
+					// Locate the Date Picker Calendar next button and click it
+					driver.findElement(By.cssSelector("button.next")).click();
+					Thread.sleep(2000);
+					
+				}while(!driver.findElement(datepickerCalMonthCaptionLocator).getText().equals("Jan 2021"));
+				
+			}
+			
+			// Click on Jan 31 2021
+			driver.findElement(By.xpath("//button[@data-year='2021'][@data-month='0'][@data-day='31']")).click();
+
+			
+			
+			Thread.sleep(3000);
 
 		} catch (Exception e) {
 			e.printStackTrace();
