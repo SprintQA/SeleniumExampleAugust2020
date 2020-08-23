@@ -56,24 +56,27 @@ public class DynamicTablesDemo {
 			String expectedValue = "ESS";
 			String placeholder = "";
 
-//			for (WebElement row : rows) {
-//				System.out.println(row.getText());
+			for (WebElement row : rows) {
+
+				
+				
+				//				System.out.println(row.getText());
 //				if (row.getText().contains(expectedValue)) {
 //					row.findElement(By.xpath("//td//input")).click();
 //					Thread.sleep(1000);
 //				}
-//			}
-			
-			String rowLocatorString = "//table[@id='resultTable']//tbody//tr";
-
-			for (int x = 1; x <= rows.size(); x++) {
-				placeholder = driver.findElement(By.xpath(rowLocatorString+"[" + x + "]")).getText();
-				System.out.println(placeholder);
-				if (placeholder.contains(expectedValue)) {
-					driver.findElement(By.xpath(rowLocatorString + "[" + x + "]//td//input")).click();
-					Thread.sleep(1000);
-				}
 			}
+			
+//			String rowLocatorString = "//table[@id='resultTable']//tbody//tr";
+//
+//			for (int x = 1; x <= rows.size(); x++) {
+//				placeholder = driver.findElement(By.xpath(rowLocatorString+"[" + x + "]")).getText();
+//				System.out.println(placeholder);
+//				if (placeholder.contains(expectedValue)) {
+//					driver.findElement(By.xpath(rowLocatorString + "[" + x + "]//td//input")).click();
+//					Thread.sleep(1000);
+//				}
+//			}
 
 			Thread.sleep(2000);
 
