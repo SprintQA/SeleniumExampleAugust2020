@@ -3,7 +3,7 @@ package com.sprintqa.class57;
 import java.io.File;
 import java.time.Duration;
 import java.util.HashMap;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +15,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class DownloadFileDemo {
+public class InClassUploadFileAssignment {
 
 	public static void main(String[] args) {
 		WebDriver driver = null;
@@ -24,82 +24,84 @@ public class DownloadFileDemo {
 			System.setProperty("webdriver.chrome.driver",
 					"/Users/mpmeloche/development/eclipse-workspace/SeleniumProject/drivers/chromedriver");
 
-			/*
-			 * Configure Chrome options to set download path.
-			 */		
+			String userDir = System.getProperty("user.dir");
+			
+			// Configure Chrome
 			HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
 			chromePrefs.put("profile.default_content_settings.popups", 0);
-			chromePrefs.put("download.default_directory", System.getProperty("user.dir"));
+			chromePrefs.put("download.default_directory", userDir);
 			
-			System.out.println(System.getProperty("user.dir"));
+			System.out.println(userDir);
 			
 			ChromeOptions options = new ChromeOptions();
 			options.setExperimentalOption("prefs", chromePrefs);
 			
 			driver = new ChromeDriver(options);
-			
-			String url = "https://www.thinkbroadband.com/download";
+	
+			String url = "http://uitestpractice.com/Students/Widgets";
 			driver.get(url);
 			driver.manage().window().fullscreen();
-
+			driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+			
 			/*
-			 *  Go to: https://www.thinkbroadband.com/download
-			 *  1. Locate the download links
+			 * Go to: http://uitestpractice.com/Students/Widgets
+			 * 1. Click the "download a image" button 
+			 * 
+			 * 2. Verify the file is downloaded
+			 * 
+			 * 3. Find upload file button
+			 * 
+			 * 4. Send downloaded file path
+			 * 
+			 * 5. Click upload file
+			 * 
+			 * 6. Set explicit wait 30 sec
+			 * 
+			 * 7. Wait until contact us is loaded
+			 * 
+			 * 8. Locate file uploaded window
+			 * 
+			 * 9. Verify file upload window is displayed
 			 */
-			
-			By paragraphLinkImagesLocator = By.xpath("//div[@class='module']//p//a//img");
-			List<WebElement> list = driver.findElements(paragraphLinkImagesLocator);
-			
-			/* 
-			 * Since the 5MB.zip is the last image we can get it by grabbing the last
-			 * WebElement in the collection. 
-			 */
-			int totalNumberOfWebElementsFound = list.size();
-			WebElement extraSmallFileImgLink = list.get(totalNumberOfWebElementsFound - 1);
 
 			
-			 /*  2. Click the last one to download 5MB file :)			
-			 *  
-			 *  3. Set Explicit wait time to 25s
-			 */
+			String targetFile = "images.png";
 			
-			WebDriverWait wait = new WebDriverWait(driver, 25);
+			WebElement downloadLink = driver.findElement(By.linkText("Download a image"));
+			downloadLink.click();
+			downloadFile(driver, targetFile);
+
+			WebDriverWait wait = new WebDriverWait(driver, 30);
+			targetFile = userDir + "/files/placeholder.txt";
 			
-			 /*  4. Wait until the extraSmallFileImgLink is visible and click it.
-			 */ 
-			wait.until(ExpectedConditions.visibilityOf(extraSmallFileImgLink));
+			WebElement chooseFileButton = driver.findElement(By.id("image_file"));
+			chooseFileButton.sendKeys(targetFile);
+
+			WebElement uploadForm = driver.findElement(By.xpath("//input[@value='Upload']"));
+			uploadForm.click();
+
+			By contactUsDivLocator = By.cssSelector("div.ContactUs");
+
+			wait.until(ExpectedConditions.visibilityOfElementLocated(contactUsDivLocator));
+			WebElement fileUploadedWindow = driver.findElement(contactUsDivLocator);
+
+			if (fileUploadedWindow.isDisplayed()) {
+				System.out.println("File is uploaded");
+			} else {
+				System.out.println("File is not uploaded");
+			}
+
 			
-			 /*  5. Click extra small file link
-			 */
-			extraSmallFileImgLink.click();
-			
-			 /*  6. When we clicked the extraSmallFileImgLink a file
-			 *     5MB.zip should be down loaded to the specified output folder.
-			 */
-			String fileName = "5MB.zip";
-			downloadFile(driver, fileName);
-			
+			Thread.sleep(3000);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			driver.close();
 			driver.quit();
 		}
+		
 	}
-	
-	
-	 /*  7. Create a File object with user path and expected file name.
-	 *  
-	 *  8. Wait for the file to download:
-	 *  	- Set wait time 30s
-	 *  	- Check until condition every second
-	 *  
-	 *  9. Use Java lambda to wait until file.exists
-	 *     or we reach out timeout limit.
-	 * 
-	 * 10. if file is not present – fail test
-	 * 	   else, delete file to be sure that next time new file will be downloaded
-	*/
 	
 	public static void downloadFile(WebDriver driver, String fileName) {
 		File targetFile = new File(fileName);
@@ -119,6 +121,7 @@ public class DownloadFileDemo {
 		if (!targetFile.exists()) {
 			System.out.println("File is not present");
 		}else {
+			System.out.println("File is downloaded");
 			// delete file to be sure that next time new file will be downloaded
 			targetFile.delete();
 		}
